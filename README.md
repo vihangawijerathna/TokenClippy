@@ -1,6 +1,3 @@
-Here's your content properly formatted in Markdown:
-
-````md
 # 🚀 TokenClippy
 
 TokenClippy is a secure, privacy-focused token manager designed for developers who are tired of losing track of their developer keys, GitLab Push Tokens, and API credentials.
@@ -27,24 +24,20 @@ Platforms won't show it to you again, forcing you to constantly create annoying 
 ## 🛠️ Tech Stack
 
 ### Frontend
-
 - React
 - Vite
 - Tailwind CSS
 - `@react-oauth/google`
 
 ### Backend
-
 - Node.js
 - Express
 - `google-auth-library`
 
 ### Database
-
 - MongoDB Atlas (Mongoose)
 
 ### Encryption
-
 - `crypto-js` (AES)
 
 ---
@@ -54,7 +47,6 @@ Platforms won't show it to you again, forcing you to constantly create annoying 
 ### 1. Prerequisites
 
 Make sure you have:
-
 - [Node.js](https://nodejs.org/) installed
 - A Google Cloud Developer account (for OAuth)
 - A MongoDB Atlas cluster configured
@@ -133,4 +125,3 @@ Instead of repeatedly generating new tokens or storing sensitive credentials in 
 - Google-based authentication
 
 All designed specifically for developers who manage multiple credentials every day.
-````
