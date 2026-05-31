@@ -5,6 +5,8 @@
   --text: #cdd6f4;
   --accent: #89b4fa;
   --green: #a6e3a1;
+  --amber: #f9e2af;
+  --red: #f38ba8;
 }
 
 body {
@@ -16,7 +18,7 @@ body {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -29,21 +31,21 @@ p { color: #a6adc8; margin-top: 0; }
   border-radius: 8px;
   margin-bottom: 30px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 15px;
   align-items: flex-end;
 }
 
 .form-group { display: flex; flex-direction: column; }
 .form-group label {
-  font-size: 12px;
+  font-size: 11px;
   margin-bottom: 5px;
   color: #a6adc8;
   text-transform: uppercase;
   font-weight: bold;
 }
 
-.form-group input {
+.form-group input, .form-group select {
   background: var(--overlay);
   border: 1px solid #45475a;
   padding: 10px;
@@ -51,21 +53,19 @@ p { color: #a6adc8; margin-top: 0; }
   border-radius: 6px;
   font-size: 14px;
 }
-.form-group input:focus { border-color: var(--accent); outline: none; }
+.form-group input:focus, .form-group select:focus { border-color: var(--accent); outline: none; }
 
-button {
+button[type="submit"] {
   background: var(--accent);
   border: none;
-  padding: 10px 15px;
+  padding: 11px 15px;
   cursor: pointer;
   border-radius: 6px;
   font-weight: bold;
   color: var(--bg);
   font-size: 14px;
-  transition: transform 0.1s ease;
 }
-button:hover { filter: brightness(1.1); }
-button:active { transform: scale(0.98); }
+button[type="submit"]:hover { filter: brightness(1.1); }
 
 table {
   width: 100%;
@@ -77,8 +77,41 @@ table {
 }
 
 th, td { padding: 14px; text-align: left; border-bottom: 1px solid #45475a; }
-th { background-color: #11111b; color: var(--green); font-size: 13px; text-transform: uppercase; }
+th { background-color: #11111b; color: var(--green); font-size: 12px; text-transform: uppercase; }
 code { background: var(--overlay); padding: 3px 6px; border-radius: 4px; font-family: monospace; color: #f5e0dc; }
+
+/* Icon Button System */
+.icon-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: #a6adc8;
+  transition: all 0.2s ease;
+}
+.icon-btn.copy:hover { background: rgba(137, 180, 250, 0.15); color: var(--accent); }
+.icon-btn.delete:hover { background: rgba(243, 139, 168, 0.15); color: var(--red); }
+.icon-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* Live Expiry Badge Layout */
+.expiry-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.expiry-badge svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* Visual states based on remaining time */
+.expiry-safe { color: var(--green); }
+.expiry-warning { color: var(--amber); }
+.expiry-danger { color: var(--red); }
+.expiry-never { color: #81c8be; }
 
 .toast {
   position: fixed;

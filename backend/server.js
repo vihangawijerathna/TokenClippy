@@ -5,21 +5,24 @@ require("dotenv").config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// 🌐 Secure CORS configuration to play nice with Google OAuth Popups
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Points exactly to your Vite frontend
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 
 // Test Route
 app.get("/api/health", (req, res) => {
-  res.json({ status: "TokenClippy backend is healthy and connected to DB!" });
+  res.json({ status: "TokenClippy backend is healthy and running!" });
 });
 
-// Add this line right above app.use('/api/tokens'...)
-console.log("🔍 Checking router file path:", require.resolve('./routes/tokens'));
-
-app.use('/api/tokens', require('./routes/tokens'));
-
-app.use("/api/token", require("./routes/tokens"));
+// 📌 SINGLE ROUTE MOUNT: Import the router file exactly ONCE
+const tokenRouter = require("./routes/tokens");
+app.use("/api/tokens", tokenRouter);
 
 // Database Connection
 mongoose
@@ -28,10 +31,8 @@ mongoose
   })
   .then(() => console.log("🍃 Connected to MongoDB Atlas successfully!"))
   .catch((err) => {
-    console.error("❌ MongoDB connection error details:");
-    console.error(err.message);
+    console.error("❌ MongoDB connection error details:", err.message);
   });
-
 
 // Start Server
 const PORT = process.env.PORT || 5000;
