@@ -1,0 +1,93 @@
+:root {
+  --bg: #1e1e2e;
+  --surface: #252538;
+  --overlay: #313244;
+  --text: #cdd6f4;
+  --accent: #89b4fa;
+  --green: #a6e3a1;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 40px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 { color: var(--accent); margin-bottom: 5px; }
+p { color: #a6adc8; margin-top: 0; }
+
+.token-form {
+  background: var(--surface);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.form-group { display: flex; flex-direction: column; }
+.form-group label {
+  font-size: 12px;
+  margin-bottom: 5px;
+  color: #a6adc8;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.form-group input {
+  background: var(--overlay);
+  border: 1px solid #45475a;
+  padding: 10px;
+  color: var(--text);
+  border-radius: 6px;
+  font-size: 14px;
+}
+.form-group input:focus { border-color: var(--accent); outline: none; }
+
+button {
+  background: var(--accent);
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+  color: var(--bg);
+  font-size: 14px;
+  transition: transform 0.1s ease;
+}
+button:hover { filter: brightness(1.1); }
+button:active { transform: scale(0.98); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: var(--surface);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td { padding: 14px; text-align: left; border-bottom: 1px solid #45475a; }
+th { background-color: #11111b; color: var(--green); font-size: 13px; text-transform: uppercase; }
+code { background: var(--overlay); padding: 3px 6px; border-radius: 4px; font-family: monospace; color: #f5e0dc; }
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--green);
+  color: #11111b;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
