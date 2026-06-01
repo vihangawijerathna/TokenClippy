@@ -19,7 +19,7 @@ function App() {
   const [showToast, setShowToast] = useState(false);
   const [failedAttempts, setFailedAttempts] = useState(0);
 
-  const API_URL = "http://localhost:5000/api/tokens";
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // ⚡ Guaranteed pure string header evaluation
   const getAuthHeader = (explicitToken = null) => {
