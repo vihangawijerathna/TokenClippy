@@ -8,7 +8,7 @@ RUN npm ci
 
 COPY . .
 # Compiles your React/Vite app into a production-ready /dist folder
-RUN npm run build
+RUN npm run build -- --mode production
 
 # --- STAGE 2: Serve with Nginx ---
 FROM nginx:alpine
