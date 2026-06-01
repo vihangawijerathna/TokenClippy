@@ -6,8 +6,8 @@ on:
       - main
 
 permissions:
-  contents: 'read'
-  id-token: 'write'
+  contents: "read"
+  id-token: "write"
 
 jobs:
   build-and-deploy:
@@ -22,9 +22,9 @@ jobs:
         id: auth
         uses: google-github-actions/auth@v2
         with:
-          token_format: 'access_token'
-          workload_identity_provider: 'projects/6416725908/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider'
-          service_account: 'github-actions-deployer@tokenclippy.iam.gserviceaccount.com'
+          token_format: "access_token"
+          workload_identity_provider: "projects/6416725908/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider"
+          service_account: "github-actions-deployer@tokenclippy.iam.gserviceaccount.com"
 
       # Step 3: Log in to Google Artifact Registry (GAR)
       - name: Log in to Google Artifact Registry
@@ -67,5 +67,5 @@ jobs:
       # Step 8: Deploy your newly compiled Docker containers into the GKE Cluster
       - name: Deploy to Kubernetes Cluster
         run: |
-          kubectl set image deployment/clippy-backend-deployment clippy-backend=us-central1-docker.pkg.dev/tokenclippy/tokenclippy-apps/clippy-backend:${{ github.sha }} --record
-          kubectl set image deployment/clippy-frontend-deployment clippy-frontend=us-central1-docker.pkg.dev/tokenclippy/tokenclippy-apps/clippy-frontend:${{ github.sha }} --record
+          kubectl set image deployment/clippy-backend clippy-backend=us-central1-docker.pkg.dev/tokenclippy/tokenclippy-apps/clippy-backend:${{ github.sha }}
+          kubectl set image deployment/clippy-frontend clippy-frontend=us-central1-docker.pkg.dev/tokenclippy/tokenclippy-apps/clippy-frontend:${{ github.sha }}
