@@ -83,3 +83,13 @@ resource "google_project_iam_binding" "registry_power" {
     "serviceAccount:${google_service_account.github_actions_sa.email}"
   ]
 }
+
+# 6. Give the Service Account permissions to manage GKE deployments
+resource "google_project_iam_binding" "kubernetes_power" {
+  project = "tokenclippy"
+  role    = "roles/container.developer" # 🚢 Grants full deployment access to GKE
+
+  members = [
+    "serviceAccount:${google_service_account.github_actions_sa.email}"
+  ]
+}
