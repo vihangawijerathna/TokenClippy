@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clippy-frontend
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: clippy-frontend
+  template:
+    metadata:
+      labels:
+        app: clippy-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: us-central1-docker.pkg.dev/tokenclippy/tokenclippy-apps/frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80 # Nginx default internal web port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clippy-frontend-service
+  namespace: default
+spec:
+  type: LoadBalancer
+  selector:
+    app: clippy-frontend
+  ports:
+    - protocol: TCP
+      port: 80 # Public HTTP access
+      targetPort: 80

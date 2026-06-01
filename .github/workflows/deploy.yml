@@ -61,3 +61,25 @@ jobs:
           tags: |
             ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPO }}/frontend:latest
             ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPO }}/frontend:${{ github.sha }}
+
+        # Step 6: Set up the Google Cloud SDK so GitHub can talk to GKE
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # Step 7: Connect directly to your live GKE cluster
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: tokenclippy-cluster # 👈 Must match your terraform cluster name
+          location: us-central1 # 👈 GKE Autopilot location
+          # Uses the exact same secure credentials from the earlier handshake step!
+
+      # Step 8: Apply the Kubernetes configurations live to the cluster
+      - name: Deploy to GKE
+        run: |
+          kubectl apply -f k8s/backend-deploy.yml
+          kubectl apply -f k8s/frontend-deploy.yml
+          
+          # Force Kubernetes to roll out the freshly built images instantly
+          kubectl rollout restart deployment/clippy-backend
+          kubectl rollout restart deployment/clippy-frontend
