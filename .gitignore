@@ -41,3 +41,14 @@ coverage/
 
 # Optional
 .env
+
+# =========================================================================
+# Terraform Specific Files (DO NOT REMOVE - CRITICAL FOR GCP SECURITY)
+# =========================================================================
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.exe
+crash.log
+.terraformrc
+terraform.rc

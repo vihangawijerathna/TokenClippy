@@ -1,0 +1,63 @@
+name: Build and Push to GCP Artifact Registry
+
+on:
+  push:
+    branches:
+      - main # Triggers the pipeline every time you push code to the main branch
+
+permissions:
+  contents: read
+  id-token: write # 🔑 CRITICAL: Allows GitHub to request a secure OIDC token for WIF
+
+env:
+  PROJECT_ID: tokenclippy
+  REGION: us-central1
+  GAR_REPO: tokenclippy-apps
+  # ⚠️ PASTE YOUR COPIED STRING BELOW:
+  WIF_PROVIDER: "projects/6416725908/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider"
+  WIF_SERVICE_ACCOUNT: "github-actions-deployer@tokenclippy.iam.gserviceaccount.com"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Pull your repository code into the GitHub Runner
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: The Magic Handshake! Authenticate with GCP via Workload Identity Federation
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: "access_token"
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: ${{ env.WIF_SERVICE_ACCOUNT }}
+
+      # Step 3: Log Docker directly into your private GCP Artifact Registry
+      - name: Log in to Artifact Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGION }}-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      # Step 4: Build & Push the Backend Container
+      - name: Build and Push Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPO }}/backend:latest
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPO }}/backend:${{ github.sha }}
+
+      # Step 5: Build & Push the Frontend Container
+      - name: Build and Push Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPO }}/frontend:latest
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPO }}/frontend:${{ github.sha }}
