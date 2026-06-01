@@ -1,22 +1,18 @@
-# --- STAGE 1: Build the React App ---
-FROM node:20-alpine AS build
-
+FROM node:20-alpine as builder
 WORKDIR /app
-
 COPY package*.json ./
-RUN npm ci
-
+RUN npm install
 COPY . .
-# Compiles your React/Vite app into a production-ready /dist folder
-RUN npm run build -- --mode production
 
-# --- STAGE 2: Serve with Nginx ---
+# 🔌 1. Tell Docker to expect the backend URL during build time
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
+# 🏗️ 2. Build the app (Vite will grab the ENV variable above automatically)
+RUN npm run build
+
+# Stage 2: Serve with Nginx
 FROM nginx:alpine
-
-# Copy the compiled static assets from Stage 1 into Nginx's public directory
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 80 for regular web traffic
+COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
