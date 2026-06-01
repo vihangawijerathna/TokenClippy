@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clippy-backend
+  namespace: default
+spec:
+  replicas: 2 # Keeps two copies running for high availability
+  selector:
+    matchLabels:
+      app: clippy-backend
+  template:
+    metadata:
+      labels:
+        app: clippy-backend
+    spec:
+      containers:
+        - name: backend
+          # ⚠️ Ensure this matches your exact GCP project/registry path!
+          image: us-central1-docker.pkg.dev/tokenclippy/tokenclippy-apps/backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: NODE_ENV
+              value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clippy-backend-service
+  namespace: default
+spec:
+  type: LoadBalancer # Requests a public-facing IP address from Google Cloud
+  selector:
+    app: clippy-backend
+  ports:
+    - protocol: TCP
+      port: 5000 # The public port people will hit
+      targetPort: 5000 # The internal port your container is listening on
